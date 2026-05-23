@@ -55,22 +55,22 @@ Once running, type your message and press Enter. The agent responds as Bloom, th
 
 ### Typical session flow
 
-1. Start the script — Bloom greets you
+1. Start the script : Bloom greets you
 2. Ask questions about the clinic (FAQ stage)
-3. Type `/qualify` when ready — Bloom asks 3 qualification questions
+3. Type `/qualify` when ready : Bloom asks 3 qualification questions
 4. Type `/summary` to generate and save the end-of-session report
 
 ---
 
 ## The Four Stages
 
-### Stage 1 — FAQ Answering
+### Stage 1 : FAQ Answering
 Answers customer questions strictly from the SOP data in `sop.py`. Returns a structured JSON response with `can_answer`, `confidence`, `escalate`, and `sop_gap` fields. The AI is explicitly instructed not to answer anything outside the SOP.
 
-### Stage 2 — Lead Qualification
+### Stage 2 : Lead Qualification
 Asks 3 structured questions: treatment interest, prior experience, and booking timeline. Produces a lead summary with quality classification (`hot / warm / cold`) and a recommended next action.
 
-### Stage 3 — Escalation Detection
+### Stage 3 : Escalation Detection
 Escalation is triggered by:
 - Out-of-scope question (model sets `escalate: true`)
 - Angry/frustrated sentiment (keyword detection + model detection)
@@ -81,7 +81,7 @@ Escalation is triggered by:
 
 All escalations are logged with reason, trigger message, and stage at the time of escalation.
 
-### Stage 4 — Conversation Summary
+### Stage 4 : Conversation Summary
 Generates a structured JSON summary covering:
 - Customer intent
 - Key details collected
@@ -147,15 +147,15 @@ The log file is reset at the start of each new session.
 
 ## Model
 
-All API calls use `claude-haiku-4-5-20251001` — the fastest and most cost-efficient Claude model. It is sufficient for structured JSON extraction, classification, and short-form summarisation. Token usage per session is minimal (typically under 2,000 tokens total).
+All API calls use `claude-haiku-4-5-20251001`  the fastest and most cost-efficient Claude model. It is sufficient for structured JSON extraction, classification, and short-form summarisation. Token usage per session is minimal (typically under 2,000 tokens total).
 
 ---
 
 ## Trade-offs and Known Limitations
 
-1. **No persistent memory** — conversation history lives in RAM only. Restarting the script clears all context.
-2. **Keyword escalation is simple** — negated phrases ("I am NOT angry") could falsely trigger escalation. A production system would use the LLM for all sentiment decisions.
-3. **Qualification is fixed-order** — questions are asked in sequence regardless of what the customer has already said. A smarter system would skip already-answered questions.
-4. **No streaming** — responses appear all at once. Streaming would improve perceived responsiveness in a real chat interface.
-5. **English only** — the SOP and prompts are in English. Multi-language support would require prompt translation or a multilingual SOP.
-6. **Follow-ups not scheduled** — the qualification summary recommends a next action but does not trigger any automated follow-up. This would require integration with a CRM or messaging platform.
+1. **No persistent memory** : conversation history lives in RAM only. Restarting the script clears all context.
+2. **Keyword escalation is simple** : negated phrases ("I am NOT angry") could falsely trigger escalation. A production system would use the LLM for all sentiment decisions.
+3. **Qualification is fixed-order** : questions are asked in sequence regardless of what the customer has already said. A smarter system would skip already-answered questions.
+4. **No streaming** : responses appear all at once. Streaming would improve perceived responsiveness in a real chat interface.
+5. **English only** : the SOP and prompts are in English. Multi-language support would require prompt translation or a multilingual SOP.
+6. **Follow-ups not scheduled** : the qualification summary recommends a next action but does not trigger any automated follow-up. This would require integration with a CRM or messaging platform.
